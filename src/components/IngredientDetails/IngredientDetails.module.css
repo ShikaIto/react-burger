@@ -1,0 +1,23 @@
+.title {
+    width: 640px;
+    text-align: left;
+}
+
+image {
+    width: 480px;
+    height: 240px;
+}
+
+.list {
+    padding: 0;
+    list-style-type: none;
+    display: flex;
+    gap: 20px;
+}
+
+.item {
+    min-width: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

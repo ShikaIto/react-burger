@@ -15,3 +15,14 @@
     grid-template-rows: auto;
     row-gap: 40px;
 }
+
+.item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.item :hover {
+    cursor: pointer;
+}

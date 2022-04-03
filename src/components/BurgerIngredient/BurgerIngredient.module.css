@@ -9,13 +9,6 @@
     text-align: center;
 }
 
-.item {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
 .price {
     display: flex;
     justify-content: center;
