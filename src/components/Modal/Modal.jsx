@@ -1,25 +1,50 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import modalStyles from './Modal.module.css';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import IngredientDetails from '../IngredientDetails/IngredientDetails.jsx';
-import OrderDetails from '../OrderDetails/OrderDetails.jsx';
-import { menuItemPropTypes } from '../../utils/constants.js';
+import ModalOverlay from '../ModalOverlay/ModalOverlay.jsx';
+
+const modalRoot = document.getElementById('react-modals');
 
 export default function Modal(props) {
+    const close = (e) => {
+        props.onClose(false);
+    }
+    const closeEsc = (e) => {
+        if (e.key === 'Escape') {
+            close();
+        }
+    }
 
-    return (
-        <div className={modalStyles.modal}>
-            <span className={modalStyles.close} onClick={props.close}>
-                <CloseIcon type='primary' />
-            </span>
-            {props.order && <OrderDetails order={props.order} />}
-            {props.ingredient && <IngredientDetails ingredient={props.ingredient} />}
-        </div>
-    )
+    React.useEffect(() => {
+        document.addEventListener('keydown', closeEsc);
+
+        return () => {
+            document.removeEventListener('keydown', closeEsc);
+        }
+    }, []);
+
+    return ReactDOM.createPortal(
+        (
+            <>
+                <div className={modalStyles.container}>
+                    <div className={modalStyles.modal}>
+                        <span className={modalStyles.close} onClick={close}>
+                            <CloseIcon type='primary' />
+                        </span>
+                        {props.title &&
+                            <h2 className={`text text_type_main-large mt-10 ${modalStyles.title}`}>{props.title}</h2>}
+                        {props.children}
+                    </div>
+                    <ModalOverlay close={close} />
+                </div>
+            </>
+        ),
+        modalRoot
+    );
 }
 
-Modal.prototypes = {
-    close: PropTypes.func.isRequired,
-    order: PropTypes.bool,
-    ingredient: menuItemPropTypes
+Modal.propTypes = {
+    onClose: PropTypes.func.isRequired,
 }

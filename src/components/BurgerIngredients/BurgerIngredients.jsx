@@ -4,12 +4,18 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import BurgerIngredient from '../BurgerIngredient/BurgerIngredient.jsx';
 import ingredientsStyles from './BurgerIngredients.module.css';
 import { menuItemPropTypes } from '../../utils/constants.js';
-import ModalOverlay from '../ModalOverlay/ModalOverlay.jsx'
+import Modal from '../Modal/Modal.jsx';
+import IngredientDetails from '../IngredientDetails/IngredientDetails.jsx';
 
-export default function BurgerIngredients(props) {
+
+export default function BurgerIngredients({ data }) {
   const [current, setCurrent] = React.useState('one');
   const [isModal, setIsModal] = React.useState(false);
   const [ingredient, setIngredient] = React.useState(null);
+
+  const buns = data.filter(item => item.type === 'bun');
+  const sauces = data.filter(item => item.type === 'sauce');
+  const main = data.filter(item => item.type === 'main');
 
   const handleClick = (item) => {
     setIngredient(item);
@@ -33,9 +39,9 @@ export default function BurgerIngredients(props) {
         <li>
           <h2 className='text text_type_main-medium'>Булки</h2>
           <ul className={`${ingredientsStyles.list} pl-4 pr-4`}>
-            {props.data.map((item) => (
+            {buns.map((item) => (
               <li key={item._id} className={ingredientsStyles.item} onClick={() => { handleClick(item) }}>
-                <BurgerIngredient data={item} type='bun' />
+                <BurgerIngredient data={item} />
               </li>
             ))}
           </ul>
@@ -43,9 +49,9 @@ export default function BurgerIngredients(props) {
         <li>
           <h2 className='text text_type_main-medium'>Соусы</h2>
           <ul className={`${ingredientsStyles.list} pl-4 pr-4`}>
-            {props.data.map((item) => (
+            {sauces.map((item) => (
               <li key={item._id} className={ingredientsStyles.item} onClick={() => { handleClick(item) }}>
-                <BurgerIngredient data={item} type='sauce' />
+                <BurgerIngredient data={item} />
               </li>
             ))}
           </ul>
@@ -53,15 +59,17 @@ export default function BurgerIngredients(props) {
         <li>
           <h2 className='text text_type_main-medium'>Начинки</h2>
           <ul className={`${ingredientsStyles.list} pl-4 pr-4`}>
-            {props.data.map((item) => (
+            {main.map((item) => (
               <li key={item._id} className={ingredientsStyles.item} onClick={() => { handleClick(item) }}>
-                <BurgerIngredient data={item} type='main' />
+                <BurgerIngredient data={item} />
               </li>
             ))}
           </ul>
         </li>
       </ul>
-      {isModal && <ModalOverlay setIsModal={setIsModal} ingredient={ingredient} />}
+      {isModal && <Modal onClose={setIsModal} title='Детали ингредиента'>
+        <IngredientDetails ingredient={ingredient} />
+      </Modal>}
     </>
   )
 }

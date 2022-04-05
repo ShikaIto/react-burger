@@ -3,14 +3,14 @@ import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burg
 import elementStyles from './ConstructorIngredient.module.css'
 import { menuItemPropTypes } from '../../utils/constants';
 
-export default function ConstructorIngredient(props) {
+export default function ConstructorIngredient({ data }) {
     return (
         <li className={elementStyles.element}>
             <DragIcon type='primary' />
             <ConstructorElement
-                text={props.data.name}
-                price={props.data.price}
-                thumbnail={props.data.image}
+                text={data.name}
+                price={data.price}
+                thumbnail={data.image}
             />
         </li>
     )

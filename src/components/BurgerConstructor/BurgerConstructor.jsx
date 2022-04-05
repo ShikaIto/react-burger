@@ -4,11 +4,17 @@ import { ConstructorElement, CurrencyIcon, Button } from '@ya.praktikum/react-de
 import constructorStyles from './BurgerConstructor.module.css'
 import ConstructorIngredient from '../ConstructorIngredient/ConstructorIngredient.jsx';
 import { menuItemPropTypes } from '../../utils/constants';
-import ModalOverlay from '../ModalOverlay/ModalOverlay.jsx';
+import Modal from '../Modal/Modal.jsx';
+import OrderDetails from '../OrderDetails/OrderDetails.jsx';
 
-export default function BurgerConstructor(props) {
-  const total = props.data.reduce((sum, curr) => { return sum + curr.price }, 0);
+export default function BurgerConstructor({ data, defaultBun }) {
+  const total = data.reduce((sum, curr) => { return sum + curr.price }, 0);
   const [isModal, setIsModal] = React.useState(false);
+
+  const isBun = data.find(item => item.type === 'bun');
+  const bun = isBun ? isBun : defaultBun;
+  /* в будущем я так понимаю сюда будет передаваться массив выбранных ингредиентов,
+    проверка на случай если среди них не окажется булочки */
 
   return (
     <>
@@ -16,12 +22,12 @@ export default function BurgerConstructor(props) {
         <ConstructorElement
           type="top"
           isLocked={true}
-          text={`${props.bun.name} (верх)`}
-          price={props.bun.price}
-          thumbnail={props.bun.image}
+          text={`${bun.name} (верх)`}
+          price={bun.price}
+          thumbnail={bun.image}
         />
         <ul className={`${constructorStyles.list} pr-4`}>
-          {props.data.map((ingredient) => {
+          {data.map((ingredient) => {
             if (ingredient.type !== 'bun') {
               return (
                 <React.Fragment key={ingredient._id}>
@@ -36,9 +42,9 @@ export default function BurgerConstructor(props) {
         <ConstructorElement
           type="bottom"
           isLocked={true}
-          text={`${props.bun.name} (низ)`}
-          price={props.bun.price}
-          thumbnail={props.bun.image}
+          text={`${bun.name} (низ)`}
+          price={bun.price}
+          thumbnail={bun.image}
         />
       </div>
       <div className={`${constructorStyles.box} mt-10 mr-4`}>
@@ -52,7 +58,9 @@ export default function BurgerConstructor(props) {
           </Button>
         </span>
       </div>
-      {isModal && <ModalOverlay setIsModal={setIsModal} order={true} />}
+      {isModal && <Modal onClose={setIsModal}>
+        <OrderDetails />
+      </Modal>}
     </>
   )
 }

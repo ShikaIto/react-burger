@@ -15,8 +15,14 @@ export default function App() {
   React.useEffect(() => {
     const getData = () => {
       setState({ ...state, isLoading: true });
-      fetch(api)
-        .then(res => res.json())
+      fetch(`${api}ingredients`)
+        .then(res => {
+          if (res.ok) {
+            return res.json();
+          } else {
+            return Promise.reject();
+          }
+        })
         .then(res => { setState({ ...state, ingredients: res.data, isLoading: false }) })
         .catch(e => { setState({ ...state, hasError: true, isLoading: false }) })
     }
@@ -25,6 +31,8 @@ export default function App() {
   }, [])
 
   const { ingredients, isLoading, hasError } = state;
+
+  const defaultBun = ingredients.find(ingredient => ingredient.type === 'bun');
 
   return (
     <>
@@ -38,7 +46,7 @@ export default function App() {
             <BurgerIngredients data={ingredients} />
           </section>
           <section className={appStyles.constructor}>
-            <BurgerConstructor data={ingredients} bun={ingredients[0]} />
+            <BurgerConstructor data={ingredients} defaultBun={defaultBun} />
           </section>
         </main>
       }
