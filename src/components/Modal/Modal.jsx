@@ -8,14 +8,14 @@ import ModalOverlay from '../ModalOverlay/ModalOverlay.jsx';
 const modalRoot = document.getElementById('react-modals');
 
 export default function Modal(props) {
-    const close = (e) => {
+    const close = React.useCallback((e) => {
         props.onClose(false);
-    }
-    const closeEsc = (e) => {
+    }, [props.onClose])
+    const closeEsc = React.useCallback((e) => {
         if (e.key === 'Escape') {
             close();
         }
-    }
+    }, [close])
 
     React.useEffect(() => {
         document.addEventListener('keydown', closeEsc);
@@ -47,4 +47,6 @@ export default function Modal(props) {
 
 Modal.propTypes = {
     onClose: PropTypes.func.isRequired,
+    title: PropTypes.string,
+    children: PropTypes.element.isRequired
 }
