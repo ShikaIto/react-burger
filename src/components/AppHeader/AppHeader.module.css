@@ -1,0 +1,17 @@
+.container {
+    background-color: #1c1c21;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-items: center;
+}
+
+.nav {
+    display: flex;
+}
+
+.link {
+    text-align: center;
+    border-radius: 40px;
+    display: flex;
+    text-decoration: none;
+}

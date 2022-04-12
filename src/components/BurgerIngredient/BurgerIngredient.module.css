@@ -1,0 +1,15 @@
+.image {
+    width: 240px;
+    height: 120px;
+}
+
+.title {
+    display: block;
+    min-height: 48px;
+    text-align: center;
+}
+
+.price {
+    display: flex;
+    justify-content: center;
+}

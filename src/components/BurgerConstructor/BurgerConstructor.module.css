@@ -1,0 +1,27 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.list {
+    margin: 0;
+    padding-left: 0;
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: scroll;
+    max-height: calc(100vh - 546px);
+}
+
+.box {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.span {
+    display: flex;
+}

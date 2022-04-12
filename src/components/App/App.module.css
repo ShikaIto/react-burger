@@ -1,0 +1,23 @@
+.main {
+    max-width: 1240px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
+    grid-template-areas: "title title" "ingredients constructor";
+    column-gap: 40px;
+    row-gap: 20px;
+}
+
+.tittle {
+    color: #f2f2f3;
+    grid-area: title;
+}
+
+.ingredients {
+    grid-area: ingredients;
+}
+
+.constructor {
+    grid-area: constructor;
+}
