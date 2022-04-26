@@ -1,24 +1,51 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { ConstructorElement, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import constructorStyles from './BurgerConstructor.module.css'
 import ConstructorIngredient from '../ConstructorIngredient/ConstructorIngredient.jsx';
-import { menuItemPropTypes } from '../../utils/constants';
 import Modal from '../Modal/Modal.jsx';
 import OrderDetails from '../OrderDetails/OrderDetails.jsx';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  ADD_BUN_IN_CONSTRUCTOR, ADD_INGREDIENT_IN_CONSTRUCTOR,
+  SET_TOTAL_PRICE, getOrder, SET_COUNT_INGREDIENT
+} from '../../services/actions/actions';
+import { useDrop } from 'react-dnd';
 
-export default function BurgerConstructor({ data, defaultBun }) {
-  const total = data.reduce((sum, curr) => { return sum + curr.price }, 0);
-  const [isModal, setIsModal] = React.useState(false);
+export default function BurgerConstructor() {
+  const { constructorIngredients, totalPrice, orderDetails, bun } = useSelector(store => store);
 
-  const isBun = data.find(item => item.type === 'bun');
-  const bun = isBun ? isBun : defaultBun;
-  /* в будущем я так понимаю сюда будет передаваться массив выбранных ингредиентов,
-    проверка на случай если среди них не окажется булочки */
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    let sum = constructorIngredients.reduce((sum, curr) => { return sum + curr.price }, 0);
+    let total = bun.price * 2 + sum;
+    dispatch({ type: SET_TOTAL_PRICE, totalPrice: total });
+  }, [bun, constructorIngredients]);
+
+  const handleClick = React.useCallback(() => {
+    const items = constructorIngredients.map(item => item._id);
+    items.push(bun._id, bun._id);
+    dispatch(getOrder(items));
+  }, [dispatch, constructorIngredients]);
+
+  const handleDrop = (item) => {
+    if (item.type === 'bun') {
+      dispatch({ type: ADD_BUN_IN_CONSTRUCTOR, bun: item });
+    } else {
+      dispatch({ type: ADD_INGREDIENT_IN_CONSTRUCTOR, ingredients: [...constructorIngredients, item] });
+    }
+  }
+
+  const [, dropTarget] = useDrop({
+    accept: 'ingredients',
+    drop(item) {
+      handleDrop(item);
+    }
+  });
 
   return (
     <>
-      <div className={`${constructorStyles.container}`}>
+      <div className={`${constructorStyles.container}`} ref={dropTarget}>
         <ConstructorElement
           type="top"
           isLocked={true}
@@ -27,16 +54,12 @@ export default function BurgerConstructor({ data, defaultBun }) {
           thumbnail={bun.image}
         />
         <ul className={`${constructorStyles.list} pr-4`}>
-          {data.map((ingredient) => {
-            if (ingredient.type !== 'bun') {
-              return (
-                <React.Fragment key={ingredient._id}>
-                  <ConstructorIngredient data={ingredient} />
-                </React.Fragment>
-              )
-            } else {
-              return null
-            }
+          {constructorIngredients.map((ingredient, index) => {
+            return (
+              <React.Fragment key={index}>
+                <ConstructorIngredient data={ingredient} index={index} />
+              </React.Fragment>
+            )
           })}
         </ul>
         <ConstructorElement
@@ -49,22 +72,18 @@ export default function BurgerConstructor({ data, defaultBun }) {
       </div>
       <div className={`${constructorStyles.box} mt-10 mr-4`}>
         <span className={`${constructorStyles.span} mr-10`}>
-          <p className='text text_type_digits-medium mr-2'>{total}</p>
+          <p className='text text_type_digits-medium mr-2'>{totalPrice}</p>
           <CurrencyIcon type='primary' />
         </span>
-        <span onClick={() => { setIsModal(true) }}>
+        <span onClick={handleClick}>
           <Button type="primary" size="medium">
             Оформить заказ
           </Button>
         </span>
       </div>
-      {isModal && <Modal onClose={setIsModal}>
+      {orderDetails && <Modal>
         <OrderDetails />
       </Modal>}
     </>
   )
-}
-
-BurgerConstructor.propTypes = {
-  data: PropTypes.arrayOf(menuItemPropTypes).isRequired
 }
