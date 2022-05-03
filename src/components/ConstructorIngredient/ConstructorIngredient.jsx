@@ -1,22 +1,24 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import elementStyles from './ConstructorIngredient.module.css'
 import { menuItemPropTypes } from '../../utils/constants';
 import { useDrag, useDrop } from 'react-dnd';
-import { useSelector, useDispatch } from 'react-redux';
-import { ADD_INGREDIENT_IN_CONSTRUCTOR } from '../../services/actions/actions';
+import { useDispatch } from 'react-redux';
+import {
+    DELETE_INGREDIENT_IN_CONSTRUCTOR, SWAP_INGREDIENT_IN_CONSTRUCTOR
+} from '../../services/actions/actions';
 
-export default function ConstructorIngredient({ data, index }) {
-    const { constructorIngredients } = useSelector(store => store);
-
+export default function ConstructorIngredient({ ingredient, index }) {
     const dispatch = useDispatch();
 
-    const handleDropSwap = (dragIndex, dropIndex) => {
-        const arr = [...constructorIngredients];
-        const item = arr.splice(dragIndex, 1, arr[dropIndex]);
-        arr.splice(dropIndex, 1, item[0]);
-        dispatch({ type: ADD_INGREDIENT_IN_CONSTRUCTOR, ingredients: arr });
-    }
+    const handleClose = React.useCallback((id) => {
+        dispatch({ type: DELETE_INGREDIENT_IN_CONSTRUCTOR, id: id });
+    }, [dispatch]);
+
+    const handleDropSwap = React.useCallback((dragIndex, dropIndex) => {
+        dispatch({ type: SWAP_INGREDIENT_IN_CONSTRUCTOR, dragIndex: dragIndex, dropIndex: dropIndex });
+    }, [dispatch]);
 
     const [{ isDrag }, dragRef] = useDrag({
         type: 'swap',
@@ -28,26 +30,55 @@ export default function ConstructorIngredient({ data, index }) {
 
     const [, dropRef] = useDrop({
         accept: 'swap',
-        drop(item) {
-            handleDropSwap(item.index, index);
+        hover(item, monitor) {
+            const dragIndex = item.index;
+            const hoverIndex = index;
+
+            if (dragIndex === hoverIndex) {
+                return
+            }
+
+            const hoverBoundingRect = ref.current?.getBoundingClientRect();
+            const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+            const clientOffset = monitor.getClientOffset();
+            const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+
+            if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+                return
+            }
+            if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+                return
+            }
+
+            handleDropSwap(dragIndex, hoverIndex);
+
+            item.index = hoverIndex;
         },
+
     });
+
+    const opacity = isDrag ? 0 : 1;
 
     const ref = React.useRef(null);
     const dragDropRef = dragRef(dropRef(ref));
 
-    return (!isDrag &&
-        <li className={elementStyles.element} draggable ref={dragDropRef} >
+    return (
+        <li className={elementStyles.element} draggable ref={dragDropRef} style={{ opacity }} >
             <DragIcon type='primary' />
             <ConstructorElement
-                text={data.name}
-                price={data.price}
-                thumbnail={data.image}
+                text={ingredient.data.name}
+                price={ingredient.data.price}
+                thumbnail={ingredient.data.image}
+                handleClose={() => { handleClose(ingredient.id) }}
             />
         </li>
     )
 }
 
 ConstructorIngredient.propTypes = {
-    data: menuItemPropTypes.isRequired
+    ingredient: PropTypes.shape({
+        data: menuItemPropTypes,
+        id: PropTypes.string
+    }).isRequired,
+    index: PropTypes.number.isRequired
 };

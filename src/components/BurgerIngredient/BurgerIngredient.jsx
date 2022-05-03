@@ -2,23 +2,31 @@ import React from 'react';
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import ingredientStyles from './BurgerIngredient.module.css';
 import { menuItemPropTypes } from '../../utils/constants';
-import { useDispatch, useSelector } from 'react-redux';
-import { ACTIVE_INGREDIENT_DETAILS } from '../../services/actions/actions.js';
 import { useDrag } from "react-dnd";
+import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
+import { SET_CURRENT_INGREDIENT } from '../../services/actions/actions';
+import { v4 as uuidv4 } from 'uuid';
 
-export default function BurgerIngredient({ data }) {
-    const bun = useSelector(store => store.bun);
+export default function BurgerIngredient({ data, open }) {
+    const [count, setCount] = React.useState(0);
 
-    const [count, setCount] = React.useState(bun._id === data._id ? 2 : 0);
+    const { constructorIngredients } = useSelector(store => store);
+    const bun = constructorIngredients.find(el => el.data.type === 'bun');
+
     const dispatch = useDispatch();
 
     const handleClick = React.useCallback((item) => {
-        dispatch({ type: ACTIVE_INGREDIENT_DETAILS, ingredient: item });
-    }, [dispatch]);
+        open(true);
+        dispatch({ type: SET_CURRENT_INGREDIENT, ingredient: item });
+    }, [open]);
 
     const [{ getItem, isDrag, isDrop }, dragRef] = useDrag({
         type: 'ingredients',
-        item: data,
+        item: {
+            data,
+            id: uuidv4()
+        },
         collect: monitor => ({
             getItem: monitor.getItem(),
             isDrag: monitor.isDragging(),
@@ -27,7 +35,7 @@ export default function BurgerIngredient({ data }) {
     });
 
     React.useEffect(() => {
-        if (isDrag && getItem._id === data._id) {
+        if (isDrag && getItem.data._id === data._id) {
             if (isDrop) {
                 if (data.type === 'bun') {
                     setCount(count + 2);
@@ -35,10 +43,19 @@ export default function BurgerIngredient({ data }) {
                     setCount(count + 1);
                 }
             }
-        } else if (data.type === 'bun' && bun._id !== data._id) {
+        } else if (constructorIngredients.length <= 0 ||
+            bun && data.type === 'bun' && data._id !== bun.data._id) {
             setCount(0);
+        } else if (data.type !== 'bun' && constructorIngredients.length > 0) {
+            let num = 0;
+            constructorIngredients.forEach(element => {
+                if (element.data._id === data._id) {
+                    num++;
+                }
+            });
+            setCount(num);
         }
-    }, [isDrag, isDrop, bun]);
+    }, [isDrag, isDrop, constructorIngredients, bun]);
 
 
     return (
@@ -56,4 +73,5 @@ export default function BurgerIngredient({ data }) {
 
 BurgerIngredient.propTypes = {
     data: menuItemPropTypes.isRequired,
+    open: PropTypes.func.isRequired
 };

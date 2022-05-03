@@ -4,17 +4,14 @@ import PropTypes from 'prop-types';
 import modalStyles from './Modal.module.css';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import ModalOverlay from '../ModalOverlay/ModalOverlay.jsx';
-import { useSelector, useDispatch } from 'react-redux';
-import { INACTIVE_MODAL } from '../../services/actions/actions';
 
 const modalRoot = document.getElementById('react-modals');
 
-export default function Modal({ title, children }) {
-    const dispatch = useDispatch();
+export default function Modal({ title, onClose, children }) {
 
     const close = React.useCallback((e) => {
-        dispatch({ type: INACTIVE_MODAL });
-    }, [dispatch]);
+        onClose(false);
+    }, [onClose]);
 
     const closeEsc = React.useCallback((e) => {
         if (e.key === 'Escape') {
@@ -52,5 +49,6 @@ export default function Modal({ title, children }) {
 
 Modal.propTypes = {
     title: PropTypes.string,
-    children: PropTypes.element.isRequired
+    children: PropTypes.element.isRequired,
+    onClose: PropTypes.func.isRequired
 }

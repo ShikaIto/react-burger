@@ -18,7 +18,6 @@ export default function App() {
     dispatch(getIngredients());
   }, [dispatch])
 
-
   return (
     <>
       < AppHeader />

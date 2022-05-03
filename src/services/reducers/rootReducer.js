@@ -1,8 +1,9 @@
 import { SET_TOTAL_PRICE, GET_INGREDIENTS, GET_INGREDIENTS_FAILED,
-    GET_INGREDIENTS_SUCCESS, ACTIVE_INGREDIENT_DETAILS, INACTIVE_MODAL,
-    ACTIVE_ORDER_DETAILS, SET_CURRENT_TAB, ADD_BUN_IN_CONSTRUCTOR,
+    GET_INGREDIENTS_SUCCESS, SET_CURRENT_TAB,
     ADD_INGREDIENT_IN_CONSTRUCTOR, GET_ORDER, GET_ORDER_FAILED,
-    GET_ORDER_SUCCESS } from "../actions/actions";
+    GET_ORDER_SUCCESS, SET_CURRENT_INGREDIENT, SWAP_INGREDIENT_IN_CONSTRUCTOR,
+    DELETE_INGREDIENT_IN_CONSTRUCTOR } 
+    from "../actions/actions";
 
 const initialState = {
     ingredients: [],
@@ -11,17 +12,12 @@ const initialState = {
 
     constructorIngredients: [],
     count: [],
-    bun: {},
-    
-    ingredientDetails: false,
+
     currentIngredient: {},
 
-    orderDetails: false,
-    order: {},
+    order: 0,
     orderRequest: false,
     orderFailed: false,
-
-    buttonText: 'Оформить заказ',
 
     totalPrice: 0,
 
@@ -30,8 +26,21 @@ const initialState = {
 
 export const rootReducer = (state = initialState, action) => {
     switch(action.type) {
-        case ADD_BUN_IN_CONSTRUCTOR: {
-            return {...state, bun: action.bun}
+        case DELETE_INGREDIENT_IN_CONSTRUCTOR: {
+            const arr = [...state.constructorIngredients];
+            const index = arr.findIndex(el => el.id === action.id);
+            arr.splice(index, 1);
+            return {...state, constructorIngredients: arr}
+        }
+        case SWAP_INGREDIENT_IN_CONSTRUCTOR: {
+            const arr = [...state.constructorIngredients];
+            const item = arr[action.dragIndex]
+            arr[action.dragIndex] = arr[action.dropIndex];
+            arr[action.dropIndex] = item;
+            return {...state, constructorIngredients: arr}
+        }
+        case SET_CURRENT_INGREDIENT: {
+            return {...state, currentIngredient: action.ingredient}
         }
         case ADD_INGREDIENT_IN_CONSTRUCTOR: {
             return {...state, constructorIngredients: action.ingredients}
@@ -42,15 +51,6 @@ export const rootReducer = (state = initialState, action) => {
         case SET_TOTAL_PRICE: {
             return {...state, totalPrice: action.totalPrice}
         }
-        case ACTIVE_ORDER_DETAILS: {
-            return {...state, orderDetails: true}
-        }
-        case ACTIVE_INGREDIENT_DETAILS: {
-            return {...state, currentIngredient: action.ingredient, ingredientDetails: true}
-        }
-        case INACTIVE_MODAL: {
-            return {...state, ingredientDetails: false, orderDetails: false, currentIngredient: {}}
-        }
         case GET_INGREDIENTS: {
             return {...state, ingredientsRequest: true, ingredientsFailed: false}
         }
@@ -58,16 +58,16 @@ export const rootReducer = (state = initialState, action) => {
             return {...state, ingredientsFailed: true, ingredientsRequest: false}
         }
         case GET_INGREDIENTS_SUCCESS: {
-            return {...state, ingredientsRequest: false, ingredients: action.ingredients, bun: action.bun}
+            return {...state, ingredientsRequest: false, ingredients: action.ingredients}
         }
         case GET_ORDER: {
-            return {...state, orderRequest: true, orderFailed: false, buttonText: 'Загрузка...'}
+            return {...state, orderRequest: true, orderFailed: false}
         }
         case GET_ORDER_SUCCESS: {
-            return {...state, orderRequest: false, order: action.order, buttonText: 'Оформить заказ'}
+            return {...state, orderRequest: false, order: action.order, constructorIngredients: []}
         }
         case GET_ORDER_FAILED: {
-            return {...state, orderRequest: false, orderFailed: true, buttonText: 'Оформить заказ'}
+            return {...state, orderRequest: false, orderFailed: true}
         }
         default: {
             return state;

@@ -7,14 +7,14 @@ import IngredientDetails from '../IngredientDetails/IngredientDetails.jsx';
 import { useSelector, useDispatch } from 'react-redux';
 import { SET_CURRENT_TAB } from '../../services/actions/actions.js';
 
-
-
 export default function BurgerIngredients() {
+  const [isModal, setIsModal] = React.useState(false);
+
   const bunsRef = React.useRef(null);
   const soucesRef = React.useRef(null);
   const mainRef = React.useRef(null);
 
-  const { ingredients, ingredientDetails, currentTab, constructorIngredients } = useSelector(store => store);
+  const { ingredients, currentTab } = useSelector(store => store);
 
   const dispatch = useDispatch();
 
@@ -72,9 +72,7 @@ export default function BurgerIngredients() {
           <h2 className='text text_type_main-medium'>Булки</h2>
           <ul className={`${ingredientsStyles.list} pl-4 pr-4`}>
             {buns.map((item) => (
-              <React.Fragment key={item._id}>
-                <BurgerIngredient data={item} />
-              </React.Fragment>
+              <BurgerIngredient data={item} key={item._id} open={setIsModal} />
             ))}
           </ul>
         </li>
@@ -82,9 +80,7 @@ export default function BurgerIngredients() {
           <h2 className='text text_type_main-medium'>Соусы</h2>
           <ul className={`${ingredientsStyles.list} pl-4 pr-4`}>
             {sauces.map((item) => (
-              <React.Fragment key={item._id}>
-                <BurgerIngredient data={item} />
-              </React.Fragment>
+              <BurgerIngredient data={item} key={item._id} open={setIsModal} />
             ))}
           </ul>
         </li>
@@ -92,14 +88,12 @@ export default function BurgerIngredients() {
           <h2 className='text text_type_main-medium'>Начинки</h2>
           <ul className={`${ingredientsStyles.list} pl-4 pr-4`}>
             {main.map((item) => (
-              <React.Fragment key={item._id}>
-                <BurgerIngredient data={item} />
-              </React.Fragment>
+              <BurgerIngredient data={item} key={item._id} open={setIsModal} />
             ))}
           </ul>
         </li>
       </ul>
-      {ingredientDetails && <Modal title='Детали ингредиента'>
+      {isModal && <Modal title='Детали ингредиента' onClose={setIsModal}>
         <IngredientDetails />
       </Modal>}
     </>
