@@ -37,9 +37,9 @@ export default function BurgerIngredient({ data, open }) {
     React.useEffect(() => {
         if (isDrag && getItem.data._id === data._id) {
             if (isDrop) {
-                if (data.type === 'bun') {
+                if (data.type === 'bun' && count < 2) {
                     setCount(count + 2);
-                } else {
+                } else if (data.type !== 'bun') {
                     setCount(count + 1);
                 }
             }
