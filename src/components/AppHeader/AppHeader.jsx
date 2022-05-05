@@ -10,7 +10,7 @@ export default function AppHeader() {
   });
 
   return (
-    <header className='p-10'>
+    <header className={`p-10`}>
       <div className={`${headerStyles.container} p-4`}>
         <nav className={headerStyles.nav}>
           <a href='#' className={`${headerStyles.link} text text_type_main-default pl-5 pt-4 pr-5 pb-4`}>

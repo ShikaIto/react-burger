@@ -7,10 +7,12 @@ import ModalOverlay from '../ModalOverlay/ModalOverlay.jsx';
 
 const modalRoot = document.getElementById('react-modals');
 
-export default function Modal(props) {
+export default function Modal({ title, onClose, children }) {
+
     const close = React.useCallback((e) => {
-        props.onClose(false);
-    }, [props.onClose])
+        onClose(false);
+    }, [onClose]);
+
     const closeEsc = React.useCallback((e) => {
         if (e.key === 'Escape') {
             close();
@@ -23,7 +25,7 @@ export default function Modal(props) {
         return () => {
             document.removeEventListener('keydown', closeEsc);
         }
-    }, []);
+    }, [closeEsc]);
 
     return ReactDOM.createPortal(
         (
@@ -33,9 +35,9 @@ export default function Modal(props) {
                         <span className={modalStyles.close} onClick={close}>
                             <CloseIcon type='primary' />
                         </span>
-                        {props.title &&
-                            <h2 className={`text text_type_main-large mt-10 ${modalStyles.title}`}>{props.title}</h2>}
-                        {props.children}
+                        {title &&
+                            <h2 className={`text text_type_main-large mt-10 ${modalStyles.title}`}>{title}</h2>}
+                        {children}
                     </div>
                     <ModalOverlay close={close} />
                 </div>
@@ -46,7 +48,7 @@ export default function Modal(props) {
 }
 
 Modal.propTypes = {
-    onClose: PropTypes.func.isRequired,
     title: PropTypes.string,
-    children: PropTypes.element.isRequired
+    children: PropTypes.element.isRequired,
+    onClose: PropTypes.func.isRequired
 }

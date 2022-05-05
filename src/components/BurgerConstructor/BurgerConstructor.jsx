@@ -1,58 +1,93 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { ConstructorElement, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import constructorStyles from './BurgerConstructor.module.css'
 import ConstructorIngredient from '../ConstructorIngredient/ConstructorIngredient.jsx';
-import { menuItemPropTypes } from '../../utils/constants';
 import Modal from '../Modal/Modal.jsx';
 import OrderDetails from '../OrderDetails/OrderDetails.jsx';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  ADD_INGREDIENT_IN_CONSTRUCTOR, SET_TOTAL_PRICE, getOrder
+} from '../../services/actions/actions';
+import { useDrop } from 'react-dnd';
 
-export default function BurgerConstructor({ data, defaultBun }) {
-  const total = data.reduce((sum, curr) => { return sum + curr.price }, 0);
+export default function BurgerConstructor() {
   const [isModal, setIsModal] = React.useState(false);
 
-  const isBun = data.find(item => item.type === 'bun');
-  const bun = isBun ? isBun : defaultBun;
-  /* в будущем я так понимаю сюда будет передаваться массив выбранных ингредиентов,
-    проверка на случай если среди них не окажется булочки */
+  const { constructorIngredients, totalPrice } = useSelector(store => store);
+
+  const dispatch = useDispatch();
+
+  const bun = constructorIngredients.find(item => item.data.type === 'bun');
+
+  React.useEffect(() => {
+    let sum = constructorIngredients.reduce((sum, curr) => { return sum + curr.data.price }, 0);
+    let total = bun ? sum + bun.data.price : sum;
+    dispatch({ type: SET_TOTAL_PRICE, totalPrice: total });
+  }, [constructorIngredients]);
+
+  const handleClick = React.useCallback(() => {
+    const items = constructorIngredients.map(item => item.data._id);
+    items.push(bun.data._id);
+    dispatch(getOrder(items));
+    setIsModal(true);
+  }, [dispatch, constructorIngredients]);
+
+  const handleDrop = (item) => {
+    if (item.data.type === 'bun' && constructorIngredients.find(el => el.data.type === 'bun')) {
+      const index = constructorIngredients.findIndex(el => el.data.type === 'bun');
+      const arr = [...constructorIngredients];
+      arr.splice(index, 1, item);
+      dispatch({ type: ADD_INGREDIENT_IN_CONSTRUCTOR, ingredients: arr });
+    } else {
+      dispatch({ type: ADD_INGREDIENT_IN_CONSTRUCTOR, ingredients: [...constructorIngredients, item] });
+    }
+
+  }
+
+  const [, dropTarget] = useDrop({
+    accept: 'ingredients',
+    drop(item) {
+      handleDrop(item);
+    }
+  });
 
   return (
     <>
-      <div className={`${constructorStyles.container}`}>
-        <ConstructorElement
+      <div className={`${constructorStyles.container}`} ref={dropTarget}>
+        {constructorIngredients.length <= 0 &&
+          <p style={{ color: '#8585ad' }} className='text text_type_main-default mt-30 mb-30'>
+            Перенесите сюда ингредиенты для создания бургера
+          </p>}
+        {bun && <ConstructorElement
           type="top"
           isLocked={true}
-          text={`${bun.name} (верх)`}
-          price={bun.price}
-          thumbnail={bun.image}
-        />
+          text={`${bun.data.name} (верх)`}
+          price={bun.data.price}
+          thumbnail={bun.data.image}
+        />}
         <ul className={`${constructorStyles.list} pr-4`}>
-          {data.map((ingredient) => {
-            if (ingredient.type !== 'bun') {
+          {constructorIngredients.map((ingredient, index) => {
+            if (ingredient.data.type !== 'bun') {
               return (
-                <React.Fragment key={ingredient._id}>
-                  <ConstructorIngredient data={ingredient} />
-                </React.Fragment>
+                <ConstructorIngredient ingredient={ingredient} index={index} key={ingredient.id} />
               )
-            } else {
-              return null
             }
           })}
         </ul>
-        <ConstructorElement
+        {bun && <ConstructorElement
           type="bottom"
           isLocked={true}
-          text={`${bun.name} (низ)`}
-          price={bun.price}
-          thumbnail={bun.image}
-        />
+          text={`${bun.data.name} (низ)`}
+          price={bun.data.price}
+          thumbnail={bun.data.image}
+        />}
       </div>
       <div className={`${constructorStyles.box} mt-10 mr-4`}>
         <span className={`${constructorStyles.span} mr-10`}>
-          <p className='text text_type_digits-medium mr-2'>{total}</p>
+          <p className='text text_type_digits-medium mr-2'>{totalPrice}</p>
           <CurrencyIcon type='primary' />
         </span>
-        <span onClick={() => { setIsModal(true) }}>
+        <span onClick={handleClick}>
           <Button type="primary" size="medium">
             Оформить заказ
           </Button>
@@ -63,8 +98,4 @@ export default function BurgerConstructor({ data, defaultBun }) {
       </Modal>}
     </>
   )
-}
-
-BurgerConstructor.propTypes = {
-  data: PropTypes.arrayOf(menuItemPropTypes).isRequired
 }
