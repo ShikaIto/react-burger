@@ -27,7 +27,7 @@ export default function ForgotPassword() {
     return (
         <main className={styles.main}>
             <h1 className={`${styles.title} text text_type_main-medium mb-6`}>Восстановление пароля</h1>
-            <form className={`${styles.form} mb-20`}>
+            <form className={`${styles.form} mb-20`} onSubmit={handleSubmit}>
                 <div className={styles.input}>
                     <Input
                         type='email'
@@ -38,7 +38,7 @@ export default function ForgotPassword() {
                         value={form.email} />
                 </div>
                 <div>
-                    <Button type="primary" size="medium" onClick={handleSubmit}>Восстановить</Button>
+                    <Button type="primary" size="medium">Восстановить</Button>
                 </div>
             </form>
             <p className='text text_type_main-default text_color_inactive'>

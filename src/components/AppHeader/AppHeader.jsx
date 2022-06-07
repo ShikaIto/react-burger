@@ -40,7 +40,9 @@ export default function AppHeader() {
             </span>
           </Link>
         </nav>
-        <Logo />
+        <Link to='/'>
+          <Logo />
+        </Link>
         <div>
           <Link
             to='/profile'

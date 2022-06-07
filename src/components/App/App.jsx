@@ -1,20 +1,20 @@
-import AppHeader from './components/AppHeader/AppHeader.jsx';
+import AppHeader from '../AppHeader/AppHeader.jsx';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { getIngredients } from './services/actions/main.js';
-import { getUser } from './services/actions/profile.js';
-import { getCookie } from './utils/utils.js';
+import { getIngredients } from '../../services/actions/main.js';
+import { getUser } from '../../services/actions/profile.js';
+import { getCookie } from '../../utils/utils.js';
 import { Route, Routes, useLocation } from 'react-router-dom';
-import MainPage from './pages/MainPage/MainPage.jsx';
-import ProtectedRoute from './components/ProtectedRoute.jsx';
-import Login from './pages/Login/Login.jsx';
-import Register from './pages/Register/Register.jsx';
-import ForgotPassword from './pages/ForgotPassword/ForgotPassword.jsx';
-import ResetPassword from './pages/ResetPassword/ResetPassword.jsx';
-import Profile from './pages/Profile/Profile.jsx';
-import NotFound from './pages/NotFound404/NotFound404.jsx';
-import IngredientDetails from './components/IngredientDetails/IngredientDetails.jsx';
-import Modal from './components/Modal/Modal.jsx';
+import MainPage from '../../pages/MainPage/MainPage.jsx';
+import ProtectedRoute from '../ProtectedRoute.jsx';
+import Login from '../../pages/Login/Login.jsx';
+import Register from '../../pages/Register/Register.jsx';
+import ForgotPassword from '../../pages/ForgotPassword/ForgotPassword.jsx';
+import ResetPassword from '../../pages/ResetPassword/ResetPassword.jsx';
+import Profile from '../../pages/Profile/Profile.jsx';
+import NotFound from '../../pages/NotFound404/NotFound404.jsx';
+import IngredientDetails from '../IngredientDetails/IngredientDetails.jsx';
+import Modal from '../Modal/Modal.jsx';
 
 export default function App() {
     const dispatch = useDispatch();

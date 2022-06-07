@@ -14,6 +14,7 @@ import { Navigate } from 'react-router-dom';
 export default function BurgerConstructor() {
   const [isModal, setIsModal] = React.useState(false);
   const [isOrder, setIsOrder] = React.useState(false);
+  const [isBun, setIsBun] = React.useState(false);
 
   const { constructorIngredients, totalPrice } = useSelector(store => store.main);
   const auth = useSelector(store => store.profile.auth);
@@ -23,6 +24,9 @@ export default function BurgerConstructor() {
   const bun = constructorIngredients.find(item => item.data.type === 'bun');
 
   React.useEffect(() => {
+    if (bun) {
+      setIsBun(true);
+    }
     let sum = constructorIngredients.reduce((sum, curr) => { return sum + curr.data.price }, 0);
     let total = bun ? sum + bun.data.price : sum;
     dispatch({ type: SET_TOTAL_PRICE, totalPrice: total });
@@ -97,11 +101,11 @@ export default function BurgerConstructor() {
           <p className='text text_type_digits-medium mr-2'>{totalPrice}</p>
           <CurrencyIcon type='primary' />
         </span>
-        <span onClick={handleClick}>
+        {isBun && <span onClick={handleClick}>
           <Button type="primary" size="medium">
             Оформить заказ
           </Button>
-        </span>
+        </span>}
       </div>
       {isModal && <Modal onClose={setIsModal}>
         <OrderDetails />

@@ -23,7 +23,7 @@ export default function Login() {
     return (
         <main className={styles.main}>
             <h1 className={`${styles.title} text text_type_main-medium mb-6`}>Вход</h1>
-            <form className={`${styles.form} mb-20`}>
+            <form className={`${styles.form} mb-20`} onSubmit={handleSubmit}>
                 <div className={styles.input}>
                     <Input type='email'
                         name="email"
@@ -43,7 +43,7 @@ export default function Login() {
                         value={form.password} />
                 </div>
                 <div>
-                    <Button type="primary" size="medium" onClick={handleSubmit}>Войти</Button>
+                    <Button type="primary" size="medium">Войти</Button>
                 </div>
             </form>
             <p className='text text_type_main-default text_color_inactive'>

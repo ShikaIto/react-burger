@@ -29,7 +29,7 @@ export default function ResetPassword() {
     return (
         <main className={styles.main}>
             <h1 className={`${styles.title} text text_type_main-medium mb-6`}>Восстановление пароля</h1>
-            <form className={`${styles.form} mb-20`}>
+            <form className={`${styles.form} mb-20`} onSubmit={handleSubmit}>
                 <div className={styles.input}>
                     <Input type='password'
                         name="password"
@@ -48,7 +48,7 @@ export default function ResetPassword() {
                         value={form.token} />
                 </div>
                 <div>
-                    <Button type="primary" size="medium" onClick={handleSubmit}>Сохранить</Button>
+                    <Button type="primary" size="medium">Сохранить</Button>
                 </div>
             </form>
             <p className='text text_type_main-default text_color_inactive'>

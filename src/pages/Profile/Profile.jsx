@@ -81,7 +81,7 @@ export default function Profile() {
                     изменить свои персональные данные
                 </p>
             </div>
-            <form className={styles.form}>
+            <form className={styles.form} onSubmit={handleSubmit}>
                 <div className={commonStyles.input}>
                     <Input type='text'
                         name='name'
@@ -125,7 +125,7 @@ export default function Profile() {
                     <Button type="secondary" size="medium" onClick={handleReset}>
                         Отмена
                     </Button>
-                    <Button type="primary" size="medium" onClick={handleSubmit}>Сохранить</Button>
+                    <Button type="primary" size="medium">Сохранить</Button>
                 </div>}
             </form>
         </main>
