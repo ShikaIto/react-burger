@@ -1,0 +1,29 @@
+.main {
+    height: calc(100vh - 200px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.title {
+    color: #f2f2f3;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+}
+
+.input,
+.input div:not(input + div) {
+    width: 480px;
+}
+
+.button,
+.button span:not(button + span) {
+    padding: 0;
+}
+

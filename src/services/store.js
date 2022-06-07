@@ -1,5 +1,4 @@
-import { rootReducer } from './reducers/rootReducer';
-import { getIngredients } from './actions/actions';
+import { rootReducer } from './reducers/rootReducer.js';
 import { compose, createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 

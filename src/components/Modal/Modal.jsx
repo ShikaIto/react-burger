@@ -4,13 +4,20 @@ import PropTypes from 'prop-types';
 import modalStyles from './Modal.module.css';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import ModalOverlay from '../ModalOverlay/ModalOverlay.jsx';
+import { useNavigate } from 'react-router-dom';
 
 const modalRoot = document.getElementById('react-modals');
 
 export default function Modal({ title, onClose, children }) {
 
-    const close = React.useCallback((e) => {
-        onClose(false);
+    const navigate = useNavigate();
+
+    const close = React.useCallback(() => {
+        if (onClose) {
+            onClose(false);
+        } else {
+            navigate(-1);
+        }
     }, [onClose]);
 
     const closeEsc = React.useCallback((e) => {
@@ -48,7 +55,6 @@ export default function Modal({ title, onClose, children }) {
 }
 
 Modal.propTypes = {
-    title: PropTypes.string,
     children: PropTypes.element.isRequired,
-    onClose: PropTypes.func.isRequired
+    onClose: PropTypes.func
 }

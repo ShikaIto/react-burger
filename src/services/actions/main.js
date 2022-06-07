@@ -18,11 +18,11 @@ export const DELETE_INGREDIENT_IN_CONSTRUCTOR = 'DELETE_INGREDIENT_IN_CONSTRUCTO
 
 export const SET_CURRENT_INGREDIENT = 'SET_CURRENT_INGREDIENT';
 
-function checkResponse(res) {
+export async function checkResponse(res) {
   if (res.ok) {
     return res.json();
   } else {
-    return Promise.reject();
+    return Promise.reject(await res.json());
   }
 }
 
