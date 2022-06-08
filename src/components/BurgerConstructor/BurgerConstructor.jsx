@@ -7,30 +7,41 @@ import OrderDetails from '../OrderDetails/OrderDetails.jsx';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   ADD_INGREDIENT_IN_CONSTRUCTOR, SET_TOTAL_PRICE, getOrder
-} from '../../services/actions/actions';
+} from '../../services/actions/main';
 import { useDrop } from 'react-dnd';
+import { Navigate } from 'react-router-dom';
 
 export default function BurgerConstructor() {
   const [isModal, setIsModal] = React.useState(false);
+  const [isOrder, setIsOrder] = React.useState(false);
+  const [isBun, setIsBun] = React.useState(false);
 
-  const { constructorIngredients, totalPrice } = useSelector(store => store);
+  const { constructorIngredients, totalPrice } = useSelector(store => store.main);
+  const auth = useSelector(store => store.profile.auth);
 
   const dispatch = useDispatch();
 
   const bun = constructorIngredients.find(item => item.data.type === 'bun');
 
   React.useEffect(() => {
+    if (bun) {
+      setIsBun(true);
+    }
     let sum = constructorIngredients.reduce((sum, curr) => { return sum + curr.data.price }, 0);
     let total = bun ? sum + bun.data.price : sum;
     dispatch({ type: SET_TOTAL_PRICE, totalPrice: total });
   }, [constructorIngredients]);
 
   const handleClick = React.useCallback(() => {
-    const items = constructorIngredients.map(item => item.data._id);
-    items.push(bun.data._id);
-    dispatch(getOrder(items));
-    setIsModal(true);
-  }, [dispatch, constructorIngredients]);
+    if (auth) {
+      const items = constructorIngredients.map(item => item.data._id);
+      items.push(bun.data._id);
+      dispatch(getOrder(items));
+      setIsModal(true);
+    } else {
+      setIsOrder(true);
+    }
+  }, [dispatch, constructorIngredients, auth]);
 
   const handleDrop = (item) => {
     if (item.data.type === 'bun' && constructorIngredients.find(el => el.data.type === 'bun')) {
@@ -41,7 +52,6 @@ export default function BurgerConstructor() {
     } else {
       dispatch({ type: ADD_INGREDIENT_IN_CONSTRUCTOR, ingredients: [...constructorIngredients, item] });
     }
-
   }
 
   const [, dropTarget] = useDrop({
@@ -50,6 +60,10 @@ export default function BurgerConstructor() {
       handleDrop(item);
     }
   });
+
+  if (isOrder) {
+    return <Navigate to='/login' />
+  }
 
   return (
     <>
@@ -87,11 +101,11 @@ export default function BurgerConstructor() {
           <p className='text text_type_digits-medium mr-2'>{totalPrice}</p>
           <CurrencyIcon type='primary' />
         </span>
-        <span onClick={handleClick}>
+        {isBun && <span onClick={handleClick}>
           <Button type="primary" size="medium">
             Оформить заказ
           </Button>
-        </span>
+        </span>}
       </div>
       {isModal && <Modal onClose={setIsModal}>
         <OrderDetails />

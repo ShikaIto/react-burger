@@ -3,23 +3,21 @@ import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-c
 import ingredientStyles from './BurgerIngredient.module.css';
 import { menuItemPropTypes } from '../../utils/constants';
 import { useDrag } from "react-dnd";
-import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { SET_CURRENT_INGREDIENT } from '../../services/actions/actions';
+import { SET_CURRENT_INGREDIENT } from '../../services/actions/main';
 import { v4 as uuidv4 } from 'uuid';
 
-export default function BurgerIngredient({ data, open }) {
+export default function BurgerIngredient({ data }) {
     const [count, setCount] = React.useState(0);
 
-    const { constructorIngredients } = useSelector(store => store);
+    const { constructorIngredients } = useSelector(store => store.main);
     const bun = constructorIngredients.find(el => el.data.type === 'bun');
 
     const dispatch = useDispatch();
 
     const handleClick = React.useCallback((item) => {
-        open(true);
         dispatch({ type: SET_CURRENT_INGREDIENT, ingredient: item });
-    }, [open]);
+    }, [dispatch]);
 
     const [{ getItem, isDrag, isDrop }, dragRef] = useDrag({
         type: 'ingredients',
@@ -72,6 +70,5 @@ export default function BurgerIngredient({ data, open }) {
 }
 
 BurgerIngredient.propTypes = {
-    data: menuItemPropTypes.isRequired,
-    open: PropTypes.func.isRequired
+    data: menuItemPropTypes.isRequired
 };

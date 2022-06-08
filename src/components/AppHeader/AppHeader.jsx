@@ -1,39 +1,57 @@
 import React, { useState } from 'react';
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import headerStyles from './AppHeader.module.css'
+import headerStyles from './AppHeader.module.css';
+import { Link, useLocation } from 'react-router-dom';
 
 export default function AppHeader() {
-  const [state, setState] = useState({
-    constructor: true,
-    order: false,
-    profile: false
-  });
+  const active = { color: '#f2f2f3', icon: 'primary' };
+  const inActive = { color: '#8585ad', icon: 'secondary' };
+
+  const [constructor, setConstructor] = useState(inActive);
+  const [order, setOrder] = useState(inActive);
+  const [profile, setProfile] = useState(inActive);
+
+  const location = useLocation();
+
+  React.useEffect(() => {
+    location.pathname === '/' ? setConstructor(active) : setConstructor(inActive);
+    location.pathname === '/order' ? setOrder(active) : setOrder(inActive);
+    location.pathname === '/profile' ? setProfile(active) : setProfile(inActive);
+  }, [location]);
 
   return (
     <header className={`p-10`}>
       <div className={`${headerStyles.container} p-4`}>
         <nav className={headerStyles.nav}>
-          <a href='#' className={`${headerStyles.link} text text_type_main-default pl-5 pt-4 pr-5 pb-4`}>
-            <BurgerIcon type={state.constructor ? 'primary' : 'secondary'} />
-            <span className='ml-2' style={state.constructor ? { color: '#f2f2f3' } : { color: '#8585ad' }}>
+          <Link
+            to='/'
+            className={`${headerStyles.link} text text_type_main-default pl-5 pt-4 pr-5 pb-4`}>
+            <BurgerIcon type={constructor.icon} />
+            <span className='ml-2' style={{ color: constructor.color }}>
               Конструктор
             </span>
-          </a>
-          <a href='#' className={`${headerStyles.link} text text_type_main-default pl-5 pt-4 pr-5 pb-4`}>
-            <ListIcon type={state.order ? 'primary' : 'secondary'} />
-            <span className='ml-2' style={state.order ? { color: '#f2f2f3' } : { color: '#8585ad' }}>
+          </Link>
+          <Link
+            to='/orders'
+            className={`${headerStyles.link} text text_type_main-default pl-5 pt-4 pr-5 pb-4`}>
+            <ListIcon type={order.icon} />
+            <span className='ml-2' style={{ color: order.color }}>
               Лента заказов
             </span>
-          </a>
+          </Link>
         </nav>
-        <Logo />
+        <Link to='/'>
+          <Logo />
+        </Link>
         <div>
-          <a href='#' className={`${headerStyles.link} text text_type_main-default pl-5 pt-4 pr-5 pb-4`}>
-            <ProfileIcon type={state.profile ? 'primary' : 'secondary'} />
-            <span className='ml-2' style={state.profile ? { color: '#f2f2f3' } : { color: '#8585ad' }}>
+          <Link
+            to='/profile'
+            className={`${headerStyles.link} text text_type_main-default pl-5 pt-4 pr-5 pb-4`}>
+            <ProfileIcon type={profile.icon} />
+            <span className='ml-2' style={{ color: profile.color }}>
               Личный кабинет
             </span>
-          </a>
+          </Link>
         </div>
       </div>
     </header>

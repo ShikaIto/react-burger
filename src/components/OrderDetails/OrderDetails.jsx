@@ -1,12 +1,13 @@
-import orderStyles from './OrderDetails.module.css';
+import styles from './OrderDetails.module.css';
 import done from '../../images/done.svg';
 import { useSelector } from 'react-redux';
 
 export default function OrderDetails() {
-    const { order, orderRequest, orderFailed } = useSelector(store => store);
+    const { order, orderRequest, orderFailed } = useSelector(store => store.main);
     return (
         <>
-            <h3 className={!orderFailed && !orderRequest ? `text text_type_digits-large mt-30` : 'text text_type_main-medium mt-30'}>
+            <h3 className={!orderFailed && !orderRequest ?
+                `${styles.title} text text_type_digits-large mt-30` : 'text text_type_main-medium mt-30'}>
                 {orderRequest ? 'Загрузка...' : orderFailed ? 'Произошла ошибка...' : order}
             </h3>
             <p className='text text_type_main-medium mt-8'>идентификатор заказа</p>

@@ -29,8 +29,3 @@
 .close:hover {
     cursor: pointer;
 }
-
-.title {
-    width: 640px;
-    text-align: left;
-}

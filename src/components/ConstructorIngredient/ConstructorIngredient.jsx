@@ -7,7 +7,7 @@ import { useDrag, useDrop } from 'react-dnd';
 import { useDispatch } from 'react-redux';
 import {
     DELETE_INGREDIENT_IN_CONSTRUCTOR, SWAP_INGREDIENT_IN_CONSTRUCTOR
-} from '../../services/actions/actions';
+} from '../../services/actions/main';
 
 export default function ConstructorIngredient({ ingredient, index }) {
     const dispatch = useDispatch();

@@ -2,21 +2,19 @@ import React from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import BurgerIngredient from '../BurgerIngredient/BurgerIngredient.jsx';
 import ingredientsStyles from './BurgerIngredients.module.css';
-import Modal from '../Modal/Modal.jsx';
-import IngredientDetails from '../IngredientDetails/IngredientDetails.jsx';
 import { useSelector, useDispatch } from 'react-redux';
-import { SET_CURRENT_TAB } from '../../services/actions/actions.js';
+import { SET_CURRENT_TAB } from '../../services/actions/main.js';
+import { Link, useLocation } from 'react-router-dom';
 
 export default function BurgerIngredients() {
-  const [isModal, setIsModal] = React.useState(false);
-
   const bunsRef = React.useRef(null);
   const soucesRef = React.useRef(null);
   const mainRef = React.useRef(null);
 
-  const { ingredients, currentTab } = useSelector(store => store);
+  const { ingredients, currentTab } = useSelector(store => store.main);
 
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const buns = ingredients.filter(item => item.type === 'bun');
   const sauces = ingredients.filter(item => item.type === 'sauce');
@@ -35,7 +33,7 @@ export default function BurgerIngredients() {
       });
     },
     {
-      threshold: 0.4,
+      threshold: [1, 0.3]
     }
   );
 
@@ -72,7 +70,13 @@ export default function BurgerIngredients() {
           <h2 className='text text_type_main-medium'>Булки</h2>
           <ul className={`${ingredientsStyles.list} pl-4 pr-4`}>
             {buns.map((item) => (
-              <BurgerIngredient data={item} key={item._id} open={setIsModal} />
+              <Link
+                className={ingredientsStyles.link}
+                to={`/ingredients/${item._id}`}
+                state={{ background: location }}
+                key={item._id} >
+                <BurgerIngredient data={item} />
+              </Link>
             ))}
           </ul>
         </li>
@@ -80,7 +84,13 @@ export default function BurgerIngredients() {
           <h2 className='text text_type_main-medium'>Соусы</h2>
           <ul className={`${ingredientsStyles.list} pl-4 pr-4`}>
             {sauces.map((item) => (
-              <BurgerIngredient data={item} key={item._id} open={setIsModal} />
+              <Link
+                className={ingredientsStyles.link}
+                to={`/ingredients/${item._id}`}
+                state={{ background: location }}
+                key={item._id} >
+                <BurgerIngredient data={item} />
+              </Link>
             ))}
           </ul>
         </li>
@@ -88,14 +98,17 @@ export default function BurgerIngredients() {
           <h2 className='text text_type_main-medium'>Начинки</h2>
           <ul className={`${ingredientsStyles.list} pl-4 pr-4`}>
             {main.map((item) => (
-              <BurgerIngredient data={item} key={item._id} open={setIsModal} />
+              <Link
+                className={ingredientsStyles.link}
+                to={`/ingredients/${item._id}`}
+                state={{ background: location }}
+                key={item._id} >
+                <BurgerIngredient data={item} />
+              </Link>
             ))}
           </ul>
         </li>
       </ul>
-      {isModal && <Modal title='Детали ингредиента' onClose={setIsModal}>
-        <IngredientDetails />
-      </Modal>}
     </>
   )
 }

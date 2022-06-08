@@ -1,41 +1,75 @@
-import React from 'react';
-import appStyles from './App.module.css';
 import AppHeader from '../AppHeader/AppHeader.jsx';
-import BurgerConstructor from '../BurgerConstructor/BurgerConstructor.jsx';
-import BurgerIngredients from '../BurgerIngredients/BurgerIngredients.jsx';
-import { useSelector, useDispatch } from 'react-redux';
-import { getIngredients } from '../../services/actions/actions.js';
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { getIngredients } from '../../services/actions/main.js';
+import { getUser } from '../../services/actions/profile.js';
+import { getCookie } from '../../utils/utils.js';
+import { Route, Routes, useLocation } from 'react-router-dom';
+import MainPage from '../../pages/MainPage/MainPage.jsx';
+import ProtectedRoute from '../ProtectedRoute.jsx';
+import Login from '../../pages/Login/Login.jsx';
+import Register from '../../pages/Register/Register.jsx';
+import ForgotPassword from '../../pages/ForgotPassword/ForgotPassword.jsx';
+import ResetPassword from '../../pages/ResetPassword/ResetPassword.jsx';
+import Profile from '../../pages/Profile/Profile.jsx';
+import NotFound from '../../pages/NotFound404/NotFound404.jsx';
+import IngredientDetails from '../IngredientDetails/IngredientDetails.jsx';
+import Modal from '../Modal/Modal.jsx';
 
 export default function App() {
-  const { ingredients, ingredientsRequest, ingredientsFailed } = useSelector(store => store);
+    const dispatch = useDispatch();
+    const token = getCookie('token');
 
-  const dispatch = useDispatch();
+    const location = useLocation();
+    const background = location.state?.background;
 
-  React.useEffect(() => {
-    dispatch(getIngredients());
-  }, [dispatch])
+    React.useEffect(() => {
+        dispatch(getIngredients());
+        if (token) {
+            dispatch(getUser());
+        }
+    }, [dispatch]);
 
-  return (
-    <>
-      < AppHeader />
-      {ingredientsRequest && <h1 style={{ color: '#f2f2f3' }} className='text text_type_main-large m-10'>Загрузка...</h1>}
-      {ingredientsFailed && <h1 style={{ color: '#f2f2f3' }} className='text text_type_main-large m-10'>Произошла ошибка...</h1>}
-      {!ingredientsRequest && !ingredientsFailed && ingredients.length &&
-        <main className={`${appStyles.main} pb-10`}>
-          <h1 className={`${appStyles.title} text text_type_main-large`}>Соберите бургер</h1>
-          <DndProvider backend={HTML5Backend}>
-            <section className={appStyles.ingredients}>
-              <BurgerIngredients />
-            </section>
-            <section className={appStyles.constructor}>
-              <BurgerConstructor />
-            </section>
-          </DndProvider>
-        </main>
-      }
-    </>
-  )
+    return (
+        <>
+            < AppHeader />
+            <Routes location={background || location}>
+                <Route path='/' element={<MainPage />} />
+                <Route path='/ingredients/:id' element={<IngredientDetails />} />
+                <Route path='/login' element={
+                    <ProtectedRoute anonymous={true}>
+                        <Login />
+                    </ProtectedRoute>
+                } />
+                <Route path='/register' element={
+                    <ProtectedRoute anonymous={true}>
+                        <Register />
+                    </ProtectedRoute>
+                } />
+                <Route path='/forgot-password' element={
+                    <ProtectedRoute anonymous={true}>
+                        <ForgotPassword />
+                    </ProtectedRoute>
+                } />
+                <Route path='/reset-password' element={
+                    <ProtectedRoute anonymous={true} >
+                        <ResetPassword />
+                    </ProtectedRoute>
+                } />
+                <Route path='/profile' element={
+                    <ProtectedRoute>
+                        <Profile />
+                    </ProtectedRoute>
+                } />
+                <Route path='*' element={<NotFound />} />
+            </Routes>
+            {background && <Routes>
+                <Route path='/ingredients/:id' element={
+                    <Modal>
+                        <IngredientDetails />
+                    </Modal>
+                } />
+            </Routes>}
+        </>
+    )
 }
