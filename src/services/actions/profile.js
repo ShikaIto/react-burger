@@ -127,6 +127,7 @@ function updeteToken(token) {
       if(res && res.success) {
         localStorage.setItem('token', res.refreshToken);
         document.cookie = `token=${res.accessToken}`;
+        return res
       }
     })
     .catch(err => {

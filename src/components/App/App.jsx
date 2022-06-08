@@ -15,6 +15,7 @@ import Profile from '../../pages/Profile/Profile.jsx';
 import NotFound from '../../pages/NotFound404/NotFound404.jsx';
 import IngredientDetails from '../IngredientDetails/IngredientDetails.jsx';
 import Modal from '../Modal/Modal.jsx';
+import Feed from '../../pages/Feed/Feed.jsx';
 
 export default function App() {
     const dispatch = useDispatch();
@@ -35,6 +36,7 @@ export default function App() {
             < AppHeader />
             <Routes location={background || location}>
                 <Route path='/' element={<MainPage />} />
+                <Route path='/feed' element={<Feed />} />
                 <Route path='/ingredients/:id' element={<IngredientDetails />} />
                 <Route path='/login' element={
                     <ProtectedRoute anonymous={true}>
