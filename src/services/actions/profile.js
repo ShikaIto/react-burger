@@ -114,25 +114,28 @@ export function resetPassword(items) {
   }
 }
 
-function updeteToken(token) { 
-    fetch(`${api}auth/token`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({token})
-    })
-    .then(checkResponse)
-    .then(res => {
-      if(res && res.success) {
-        localStorage.setItem('token', res.refreshToken);
-        document.cookie = `token=${res.accessToken}`;
-        return res
-      }
-    })
-    .catch(err => {
-      console.log(err);
-    })
+export function updeteToken(func, items) { 
+    return function(dispatch) {
+      const token = localStorage.getItem('token');
+      fetch(`${api}auth/token`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({token})
+      })
+      .then(checkResponse)
+      .then(res => {
+        if(res && res.success) {
+          localStorage.setItem('token', res.refreshToken);
+          document.cookie = `token=${res.accessToken}`;
+          dispatch(func(items));
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    }
 }
 
 
@@ -157,8 +160,7 @@ export function getUser() {
     })
     .catch(err => {
       if(err.message === 'jwt expired') {
-        updeteToken(localStorage.getItem('token'))
-        .then(() => { dispatch(getUser()) })
+        dispatch(updeteToken(getUser));
       }
       dispatch({type: GET_USER_FAILED});
     })
@@ -187,8 +189,7 @@ export function updeteUser(items) {
     })
     .catch(err => {
       if(err.message === 'jwt expired') {
-        updeteToken(localStorage.getItem('token'))
-        .then(() => { dispatch(updeteUser(items)) })
+        dispatch(updeteToken(updeteUser, items));
       }
       dispatch({type: UPDETE_USER_FAILED});
     })

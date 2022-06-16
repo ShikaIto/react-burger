@@ -1,4 +1,6 @@
 import { api } from "../../utils/constants";
+import { getCookie } from "../../utils/utils";
+import { updeteToken } from "./profile";
 
 export const SET_TOTAL_PRICE = 'SET_TOTAL_PRICE';
 
@@ -17,6 +19,11 @@ export const SWAP_INGREDIENT_IN_CONSTRUCTOR = 'SWAP_INGREDIENT_IN_CONSTRUCTOR';
 export const DELETE_INGREDIENT_IN_CONSTRUCTOR = 'DELETE_INGREDIENT_IN_CONSTRUCTOR';
 
 export const SET_CURRENT_INGREDIENT = 'SET_CURRENT_INGREDIENT';
+export const SET_CURRENT_ORDER = 'SET_CURRENT_ORDER';
+
+export const GET_CURRENT_ORDER = 'GET_CURRENT_ORDER';
+export const GET_CURRENT_ORDER_FAILED = 'GET_CURRENT_ORDER_FAILED';
+export const GET_CURRENT_ORDER_SUCCESS = 'GET_CURRENT_ORDER_SUCCESS';
 
 export async function checkResponse(res) {
   if (res.ok) {
@@ -45,6 +52,25 @@ export function getIngredients() {
     }
 }
 
+export function getCurrentOrder(number) {
+  return function(dispatch) {
+      dispatch({type: GET_CURRENT_ORDER});
+
+      fetch(`${api}orders/${number}`)
+      .then(checkResponse)
+      .then(res => {
+          if(res && res.success) {
+              dispatch({type: GET_CURRENT_ORDER_SUCCESS, order: res.orders[0]});
+          } else {
+              dispatch({type: GET_CURRENT_ORDER_FAILED});
+          }
+      })
+      .catch(err => {
+          dispatch({type: GET_CURRENT_ORDER_FAILED});
+      })
+  }
+}
+
 export function getOrder(items) {
   return function(dispatch) {
     dispatch({type: GET_ORDER});
@@ -52,7 +78,8 @@ export function getOrder(items) {
     fetch(`${api}orders`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        authorization: getCookie('token')
       },
       body: JSON.stringify({
         'ingredients': items
@@ -67,6 +94,9 @@ export function getOrder(items) {
       }
     })
     .catch(err => {
+      if(err.message === 'jwt expired') {
+        dispatch(updeteToken(getOrder, items));
+      }
       dispatch({type: GET_ORDER_FAILED});
     })
   }

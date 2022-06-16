@@ -16,6 +16,8 @@ import NotFound from '../../pages/NotFound404/NotFound404.jsx';
 import IngredientDetails from '../IngredientDetails/IngredientDetails.jsx';
 import Modal from '../Modal/Modal.jsx';
 import Feed from '../../pages/Feed/Feed.jsx';
+import Orders from '../../pages/Orders/Orders.jsx';
+import FeedOrderDetails from '../FeedOrderDetails/FeedOrderDetails.jsx';
 
 export default function App() {
     const dispatch = useDispatch();
@@ -38,6 +40,12 @@ export default function App() {
                 <Route path='/' element={<MainPage />} />
                 <Route path='/feed' element={<Feed />} />
                 <Route path='/ingredients/:id' element={<IngredientDetails />} />
+                <Route path='/feed/:id' element={<FeedOrderDetails />} />
+                <Route path='/profile/orders/:id' element={
+                    <ProtectedRoute>
+                        <FeedOrderDetails />
+                    </ProtectedRoute>
+                } />
                 <Route path='/login' element={
                     <ProtectedRoute anonymous={true}>
                         <Login />
@@ -63,6 +71,11 @@ export default function App() {
                         <Profile />
                     </ProtectedRoute>
                 } />
+                <Route path='/profile/orders' element={
+                    <ProtectedRoute>
+                        <Orders />
+                    </ProtectedRoute>
+                } />
                 <Route path='*' element={<NotFound />} />
             </Routes>
             {background && <Routes>
@@ -70,6 +83,18 @@ export default function App() {
                     <Modal>
                         <IngredientDetails />
                     </Modal>
+                } />
+                <Route path='/feed/:id' element={
+                    <Modal>
+                        <FeedOrderDetails />
+                    </Modal>
+                } />
+                <Route path='/profile/orders/:id' element={
+                    <ProtectedRoute>
+                        <Modal>
+                            <FeedOrderDetails />
+                        </Modal>
+                    </ProtectedRoute>
                 } />
             </Routes>}
         </>

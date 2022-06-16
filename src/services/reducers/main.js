@@ -2,7 +2,8 @@ import { SET_TOTAL_PRICE, GET_INGREDIENTS, GET_INGREDIENTS_FAILED,
     GET_INGREDIENTS_SUCCESS, SET_CURRENT_TAB,
     ADD_INGREDIENT_IN_CONSTRUCTOR, GET_ORDER, GET_ORDER_FAILED,
     GET_ORDER_SUCCESS, SET_CURRENT_INGREDIENT, SWAP_INGREDIENT_IN_CONSTRUCTOR,
-    DELETE_INGREDIENT_IN_CONSTRUCTOR } 
+    DELETE_INGREDIENT_IN_CONSTRUCTOR, GET_CURRENT_ORDER, GET_CURRENT_ORDER_FAILED,
+    GET_CURRENT_ORDER_SUCCESS, SET_CURRENT_ORDER } 
     from "../actions/main";
 
 const initialState = {
@@ -14,6 +15,10 @@ const initialState = {
     count: [],
 
     currentIngredient: false,
+    currentOrder: false,
+
+    currentOrderRequest: false,
+    currentOrderFailed: false,
 
     order: 0,
     orderRequest: false,
@@ -39,6 +44,7 @@ export const main = (state = initialState, action) => {
             arr[action.dropIndex] = item;
             return {...state, constructorIngredients: arr}
         }
+
         case SET_CURRENT_INGREDIENT: {
             return {...state, currentIngredient: action.ingredient}
         }
@@ -51,6 +57,7 @@ export const main = (state = initialState, action) => {
         case SET_TOTAL_PRICE: {
             return {...state, totalPrice: action.totalPrice}
         }
+
         case GET_INGREDIENTS: {
             return {...state, ingredientsRequest: true, ingredientsFailed: false}
         }
@@ -60,6 +67,7 @@ export const main = (state = initialState, action) => {
         case GET_INGREDIENTS_SUCCESS: {
             return {...state, ingredientsRequest: false, ingredients: action.ingredients}
         }
+
         case GET_ORDER: {
             return {...state, orderRequest: true, orderFailed: false}
         }
@@ -69,6 +77,20 @@ export const main = (state = initialState, action) => {
         case GET_ORDER_FAILED: {
             return {...state, orderRequest: false, orderFailed: true}
         }
+
+        case GET_CURRENT_ORDER: {
+            return {...state, currentOrderRequest: true, currentOrderFailed: false}
+        }
+        case GET_CURRENT_ORDER_SUCCESS: {
+            return {...state, currentOrderRequest: false, currentOrder: action.order}
+        }
+        case GET_CURRENT_ORDER_FAILED: {
+            return {...state, currentOrderRequest: false, currentOrderFailed: true}
+        }
+        case SET_CURRENT_ORDER: {
+            return {...state, currentOrder: action.order}
+        }
+
         default: {
             return state;
         }

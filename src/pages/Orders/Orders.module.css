@@ -1,0 +1,38 @@
+.main {
+    max-width: 1240px;
+    display: flex;
+    margin: 0 auto;
+}
+
+.link {
+    text-decoration: none;
+    color: #8585ad;
+    cursor: pointer;
+}
+
+.activeLink {
+    text-decoration: none;
+    color: #f2f2f3;
+}
+
+.text {
+    width: 320px;
+}
+
+.links {
+    display: flex;
+    flex-direction: column;
+}
+
+.list {
+    list-style-type: none;
+    margin: 0 16px 0 0;
+    padding: 0;
+    max-height: calc(100vh - 270px);
+    overflow-y: scroll;
+}
+
+.order_link {
+    text-decoration: none;
+    color: #f2f2f3;
+}
