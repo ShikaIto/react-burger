@@ -8,7 +8,7 @@ export const socketMiddleware = (wsUrl, wsActions) => {
       const { type, payload } = action;
  
       if (type === wsActions.wsInit) {
-        socket = new WebSocket(wsUrl);
+        socket = new WebSocket(`${wsUrl}${payload}`);
       }
       if (socket) {
 

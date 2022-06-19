@@ -15,7 +15,7 @@ export default function Feed() {
     const location = useLocation();
 
     React.useEffect(() => {
-        dispatch({ type: WS_CONNECTION_START });
+        dispatch({ type: WS_CONNECTION_START, payload: '/all' });
 
         return () => {
             dispatch({ type: WS_CONNECTION_CLOSED });

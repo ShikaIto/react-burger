@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { WS_AUTH_CONNECTION_START, WS_AUTH_CONNECTION_CLOSED } from '../../services/actions/socket';
 import FeedElement from '../../components/FeedElement/FeedElement.jsx';
 import { Link, useLocation } from "react-router-dom";
+import { getCookie } from '../../utils/utils';
 
 export default function Orders() {
     const dispatch = useDispatch();
@@ -14,7 +15,7 @@ export default function Orders() {
     const location = useLocation();
 
     React.useEffect(() => {
-        dispatch({ type: WS_AUTH_CONNECTION_START });
+        dispatch({ type: WS_AUTH_CONNECTION_START, payload: `?token=${getCookie('token').slice(7)}` });
 
         return () => {
             dispatch({ type: WS_AUTH_CONNECTION_CLOSED });

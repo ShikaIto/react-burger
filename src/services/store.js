@@ -14,10 +14,8 @@ import {
   WS_AUTH_CONNECTION_ERROR
 } from './actions/socket.js';
 import { socketMiddleware } from './middleware/socketMiddleware.js';
-import { getCookie } from '../utils/utils.js';
 
-const wsUrl = 'wss://norma.nomoreparties.space/orders/all';
-const wsUrlAuth = `wss://norma.nomoreparties.space/orders?token=${getCookie('token').slice(7)}`;
+const wsUrl = 'wss://norma.nomoreparties.space/orders';
 
 const wsActions = {
   wsInit: WS_CONNECTION_START,
@@ -45,7 +43,7 @@ const composeEnhancers =
 const enhancer = composeEnhancers(applyMiddleware(
     thunk, 
     socketMiddleware(wsUrl, wsActions), 
-    socketMiddleware(wsUrlAuth, wsActionsAuth)
+    socketMiddleware(wsUrl, wsActionsAuth)
     ));
 
 export const store = createStore(rootReducer, enhancer);
