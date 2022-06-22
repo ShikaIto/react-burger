@@ -15,7 +15,7 @@ export default function AppHeader() {
 
   React.useEffect(() => {
     location.pathname === '/' ? setConstructor(active) : setConstructor(inActive);
-    location.pathname === '/order' ? setOrder(active) : setOrder(inActive);
+    location.pathname === '/feed' ? setOrder(active) : setOrder(inActive);
     location.pathname === '/profile' ? setProfile(active) : setProfile(inActive);
   }, [location]);
 
@@ -32,7 +32,7 @@ export default function AppHeader() {
             </span>
           </Link>
           <Link
-            to='/orders'
+            to='/feed'
             className={`${headerStyles.link} text text_type_main-default pl-5 pt-4 pr-5 pb-4`}>
             <ListIcon type={order.icon} />
             <span className='ml-2' style={{ color: order.color }}>
