@@ -8,6 +8,7 @@
 
 .scroll {
     margin: 40px 0 0;
+    padding: 0;
     list-style-type: none;
     max-height: calc(100vh - 364px);
     overflow-y: scroll;
