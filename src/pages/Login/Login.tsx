@@ -1,11 +1,11 @@
-import React, { ChangeEvent, SyntheticEvent } from "react";
+import React, { ChangeEvent, SyntheticEvent, FC } from "react";
 import { Input, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from '../common.module.css';
 import { Link } from "react-router-dom";
 import { useDispatch } from "../../utils/hooks";
 import { login } from "../../services/actions/profile";
 
-export default function Login() {
+const Login: FC = () => {
     const dispatch = useDispatch();
 
     const [form, setValue] = React.useState({ email: '', password: '' });
@@ -65,3 +65,5 @@ export default function Login() {
         </main >
     )
 }
+
+export default Login

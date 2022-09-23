@@ -1,5 +1,5 @@
 import styles from './Orders.module.css';
-import React from 'react';
+import React, { FC } from 'react';
 import { NavLink } from 'react-router-dom';
 import { logout } from '../../services/actions/profile';
 import { useSelector, useDispatch } from '../../utils/hooks';
@@ -8,7 +8,7 @@ import FeedElement from '../../components/FeedElement/FeedElement';
 import { Link, useLocation } from "react-router-dom";
 import { getCookie } from '../../utils/utils';
 
-export default function Orders() {
+const Orders: FC = () => {
     const dispatch = useDispatch();
     const { wsConnectedAuth, orders, error } = useSelector(store => store.socket);
 
@@ -71,3 +71,5 @@ export default function Orders() {
         </>
     )
 }
+
+export default Orders

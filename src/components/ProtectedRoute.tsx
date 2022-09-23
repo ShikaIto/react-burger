@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, FC } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useSelector } from "../utils/hooks";
 
@@ -7,10 +7,10 @@ interface IProtectedRoute {
     children: ReactNode
 }
 
-export default function ProtectedRoute({ anonymous = false, children }: IProtectedRoute) {
+const ProtectedRoute: FC<IProtectedRoute> = ({ anonymous = false, children }) => {
     const { auth } = useSelector(store => store.profile);
 
-    const location: any = useLocation();
+    const location = useLocation();
     const from = location.state?.from;
 
     if (anonymous && auth) {
@@ -23,3 +23,5 @@ export default function ProtectedRoute({ anonymous = false, children }: IProtect
 
     return <>{children}</>
 }
+
+export default ProtectedRoute

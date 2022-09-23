@@ -1,7 +1,8 @@
 import styles from './NotFound404.module.css';
 import { Link } from 'react-router-dom';
+import { FC } from 'react';
 
-export default function NotFound() {
+const NotFound: FC = () => {
     return (
         <main className={styles.main}>
             <h2 className={`${styles.title} text text_type_digits-large`}>Not Found 404</h2>
@@ -11,3 +12,5 @@ export default function NotFound() {
         </main>
     )
 }
+
+export default NotFound

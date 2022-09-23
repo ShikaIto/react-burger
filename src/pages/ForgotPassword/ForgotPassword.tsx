@@ -1,11 +1,11 @@
 import { Input, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from '../common.module.css';
 import { Link, Navigate } from "react-router-dom";
-import React, { ChangeEvent, SyntheticEvent } from "react";
+import React, { ChangeEvent, SyntheticEvent, FC } from "react";
 import { useSelector, useDispatch } from "../../utils/hooks";
 import { forgotPassword } from "../../services/actions/profile";
 
-export default function ForgotPassword() {
+const ForgotPassword: FC = () => {
     const dispatch = useDispatch();
     const forgot = useSelector(store => store.profile.forgot);
 
@@ -52,3 +52,5 @@ export default function ForgotPassword() {
         </main >
     )
 }
+
+export default ForgotPassword

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import elementStyles from './ConstructorIngredient.module.css'
 import { useDrag, useDrop } from 'react-dnd';
@@ -13,7 +13,7 @@ interface IConstructorIngredient {
     index: number
 }
 
-export default function ConstructorIngredient({ ingredient, index }: IConstructorIngredient) {
+const ConstructorIngredient: FC<IConstructorIngredient> = ({ ingredient, index }) => {
     const dispatch = useDispatch();
 
     const handleClose = React.useCallback((id: string) => {
@@ -32,9 +32,13 @@ export default function ConstructorIngredient({ ingredient, index }: IConstructo
         })
     });
 
+    interface IItem {
+        index: number
+    }
+
     const [, dropRef] = useDrop({
         accept: 'swap',
-        hover(item: any, monitor) {
+        hover(item: IItem, monitor) {
             const dragIndex = item.index;
             const hoverIndex = index;
 
@@ -78,3 +82,5 @@ export default function ConstructorIngredient({ ingredient, index }: IConstructo
         </li>
     )
 }
+
+export default ConstructorIngredient

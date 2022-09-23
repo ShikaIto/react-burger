@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { FC, ReactNode } from 'react';
 import ReactDOM from 'react-dom';
 import modalStyles from './Modal.module.css';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -9,11 +9,11 @@ const modalRoot: any = document.getElementById('react-modals');
 
 type TProps = {
     title?: string,
-    onClose?: any,
+    onClose?: React.Dispatch<React.SetStateAction<boolean>>,
     children: ReactNode
 }
 
-export default function Modal({ title, onClose, children }: TProps) {
+const Modal: FC<TProps> = ({ title, onClose, children }) => {
 
     const navigate = useNavigate();
 
@@ -58,3 +58,5 @@ export default function Modal({ title, onClose, children }: TProps) {
         modalRoot
     );
 }
+
+export default Modal

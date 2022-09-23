@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 import { getDate } from "../../utils/utils";
 import { useSelector, useDispatch } from "../../utils/hooks";
 import { useParams } from "react-router-dom";
@@ -7,7 +7,7 @@ import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components
 import styles from './FeedOrderDetails.module.css';
 import { TIngredient } from "../../utils/types";
 
-export default function FeedOrderDetails() {
+const FeedOrderDetails: FC = () => {
     const allIngredients = useSelector(store => store.main.ingredients);
     const { currentOrder, currentOrderRequest, currentOrderFailed } = useSelector(store => store.main);
 
@@ -25,9 +25,11 @@ export default function FeedOrderDetails() {
 
     React.useEffect(() => {
         if (dataIngredients.length <= 0 && currentOrder && allIngredients.length > 0) {
-            const ingredients = currentOrder.ingredients.reduce((acc: any, val: string) => {
+            const ingredients = currentOrder.ingredients.reduce((acc: { [index: string]: TIngredient }, val: string) => {
                 let ingredient = allIngredients.find(el => el._id === val);
-                acc[val] = { ...ingredient, count: (acc[val]?.count || 0) + 1 }
+                if (ingredient) {
+                    acc[val] = { ...ingredient, count: (acc[val]?.count || 0) + 1 }
+                }
                 return acc
             }, {})
 
@@ -87,3 +89,5 @@ export default function FeedOrderDetails() {
         </>
     )
 }
+
+export default FeedOrderDetails

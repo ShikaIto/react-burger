@@ -4,8 +4,9 @@ import BurgerIngredients from '../../components/BurgerIngredients/BurgerIngredie
 import { useSelector } from '../../utils/hooks';
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { FC } from 'react';
 
-export default function MainPage() {
+const MainPage: FC = () => {
   const { ingredients, ingredientsRequest, ingredientsFailed } = useSelector(store => store.main);
 
   return (
@@ -28,3 +29,5 @@ export default function MainPage() {
     </>
   )
 }
+
+export default MainPage

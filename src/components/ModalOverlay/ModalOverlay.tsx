@@ -1,13 +1,16 @@
+import { FC } from 'react';
 import overlayStyles from './ModalOverlay.module.css';
 
 interface IModalOverlay {
     close: () => void
 }
 
-export default function ModalOverlay({ close }: IModalOverlay) {
+const ModalOverlay: FC<IModalOverlay> = ({ close }) => {
 
     return (
         <div className={overlayStyles.overlay} onClick={close}>
         </div>
     )
 }
+
+export default ModalOverlay

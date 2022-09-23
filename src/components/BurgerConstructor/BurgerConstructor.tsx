@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { ConstructorElement, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import constructorStyles from './BurgerConstructor.module.css'
 import ConstructorIngredient from '../ConstructorIngredient/ConstructorIngredient';
@@ -12,7 +12,7 @@ import { useDrop } from 'react-dnd';
 import { Navigate } from 'react-router-dom';
 import { TIngredient } from '../../utils/types';
 
-export default function BurgerConstructor() {
+const BurgerConstructor: FC = () => {
   const [isModal, setIsModal] = React.useState(false);
   const [isOrder, setIsOrder] = React.useState(false);
   const [isBun, setIsBun] = React.useState(false);
@@ -22,7 +22,7 @@ export default function BurgerConstructor() {
 
   const dispatch = useDispatch();
 
-  const bun: any = constructorIngredients.find(item => item.type === 'bun');
+  const bun = constructorIngredients.find(item => item.type === 'bun');
 
   React.useEffect(() => {
     if (bun) {
@@ -34,7 +34,7 @@ export default function BurgerConstructor() {
   }, [constructorIngredients]);
 
   const handleClick = React.useCallback(() => {
-    if (auth) {
+    if (auth && bun) {
       const items = constructorIngredients.map(item => item._id);
       items.push(bun._id);
       dispatch(getOrder(items));
@@ -114,3 +114,5 @@ export default function BurgerConstructor() {
     </>
   )
 }
+
+export default BurgerConstructor

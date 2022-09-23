@@ -3,9 +3,9 @@ import styles from '../common.module.css';
 import { Link, Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "../../utils/hooks";
 import { resetPassword } from "../../services/actions/profile";
-import React, { ChangeEvent, SyntheticEvent } from "react";
+import React, { ChangeEvent, SyntheticEvent, FC } from "react";
 
-export default function ResetPassword() {
+const ResetPassword: FC = () => {
     const dispatch = useDispatch();
     const { forgot, reset } = useSelector(store => store.profile);
 
@@ -62,3 +62,5 @@ export default function ResetPassword() {
         </main >
     )
 }
+
+export default ResetPassword

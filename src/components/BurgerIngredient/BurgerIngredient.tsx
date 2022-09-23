@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import ingredientStyles from './BurgerIngredient.module.css';
 import { useDrag } from "react-dnd";
@@ -11,7 +11,7 @@ interface IBurgerIngredient {
     data: TIngredient
 }
 
-export default function BurgerIngredient({ data }: IBurgerIngredient) {
+const BurgerIngredient: FC<IBurgerIngredient> = ({ data }) => {
     const [count, setCount] = React.useState(0);
 
     const { constructorIngredients } = useSelector(store => store.main);
@@ -72,3 +72,5 @@ export default function BurgerIngredient({ data }: IBurgerIngredient) {
         </li>
     )
 }
+
+export default BurgerIngredient

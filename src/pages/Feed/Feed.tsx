@@ -1,12 +1,12 @@
 import styles from './Feed.module.css';
 import { useSelector, useDispatch } from '../../utils/hooks';
-import React from 'react';
+import React, { FC } from 'react';
 import { WS_CONNECTION_START, WS_CONNECTION_CLOSED } from '../../services/actions/socket';
 import FeedElement from '../../components/FeedElement/FeedElement';
 import { Link, useLocation } from "react-router-dom";
 import { TOrder } from '../../utils/types';
 
-export default function Feed() {
+const Feed: FC = () => {
     const dispatch = useDispatch();
     const { wsConnected, orders, error, total, totalToday } = useSelector(store => store.socket);
 
@@ -93,3 +93,5 @@ export default function Feed() {
         </>
     )
 }
+
+export default Feed

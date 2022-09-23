@@ -117,7 +117,6 @@ export const resetPassword: AppThunk = (items) => {
 
 export const updateToken: AppThunk = (func, items) => {
   return function (dispatch: AppDispatch) {
-    console.log('обновляется!');
     const token = localStorage.getItem('token');
     fetch(`${api}auth/token`, {
       method: 'POST',

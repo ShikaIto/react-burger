@@ -1,10 +1,10 @@
 import ingredientStyles from './IngredientDetails.module.css';
 import { useSelector, useDispatch } from '../../utils/hooks';
-import React from 'react';
+import React, { FC } from 'react';
 import { useParams } from 'react-router-dom';
 import { SET_CURRENT_INGREDIENT } from '../../services/actions/main';
 
-export default function IngredientDetails() {
+const IngredientDetails: FC = () => {
     const { currentIngredient, ingredients } = useSelector(store => store.main);
 
     const dispatch = useDispatch();
@@ -43,3 +43,5 @@ export default function IngredientDetails() {
         </div>) : null
     )
 }
+
+export default IngredientDetails

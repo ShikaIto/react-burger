@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import headerStyles from './AppHeader.module.css';
 import { Link, useLocation } from 'react-router-dom';
 
-export default function AppHeader() {
+const AppHeader: FC = () => {
   type TStyle = {
     color: string,
     icon: 'primary' | 'secondary'
@@ -62,3 +62,5 @@ export default function AppHeader() {
     </header>
   )
 }
+
+export default AppHeader

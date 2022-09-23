@@ -1,5 +1,5 @@
 import AppHeader from '../AppHeader/AppHeader';
-import React from 'react';
+import React, { FC } from 'react';
 import { useDispatch } from '../../utils/hooks';
 import { getIngredients } from '../../services/actions/main';
 import { getUser } from '../../services/actions/profile';
@@ -25,11 +25,11 @@ declare module 'react' {
     }
 }
 
-export default function App() {
+const App: FC = () => {
     const dispatch = useDispatch();
     const token = getCookie('token');
 
-    const location: any = useLocation();
+    const location = useLocation();
     const background = location.state?.background;
 
     React.useEffect(() => {
@@ -106,3 +106,5 @@ export default function App() {
         </>
     )
 }
+
+export default App 

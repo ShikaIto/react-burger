@@ -1,24 +1,24 @@
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './FeedElement.module.css';
-import React from "react";
+import React, { FC } from "react";
 import { useSelector, useDispatch } from "../../utils/hooks";
 import { getDate } from "../../utils/utils";
 import { SET_CURRENT_ORDER } from "../../services/actions/main";
-import { TOrder, TIngredient} from '../../utils/types'
+import { TOrder, TIngredient } from '../../utils/types'
 
 interface IFeedElement {
     data: TOrder,
-    profile: boolean
+    profile?: boolean
 }
 
-export default function FeedElement({ data, profile = false }: IFeedElement) {
+const FeedElement: FC<IFeedElement> = ({ data, profile = false }) => {
     const [dataIngredients, setIngredients] = React.useState<TIngredient[]>([]);
     const [total, setTotal] = React.useState(0);
     const allIngredients = useSelector(store => store.main.ingredients);
 
     const dispatch = useDispatch();
 
-    const status: {[index: string]: string} = { created: 'Создан', pending: 'Готовится', done: 'Выполнен' };
+    const status: { [index: string]: string } = { created: 'Создан', pending: 'Готовится', done: 'Выполнен' };
 
     React.useEffect(() => {
         if (dataIngredients.length <= 0) {
@@ -79,3 +79,5 @@ export default function FeedElement({ data, profile = false }: IFeedElement) {
         </li>
     )
 }
+
+export default FeedElement

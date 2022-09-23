@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import BurgerIngredient from '../BurgerIngredient/BurgerIngredient';
 import ingredientsStyles from './BurgerIngredients.module.css';
@@ -6,10 +6,10 @@ import { useSelector, useDispatch } from '../../utils/hooks';
 import { SET_CURRENT_TAB } from '../../services/actions/main';
 import { Link, useLocation } from 'react-router-dom';
 
-export default function BurgerIngredients() {
-  const bunsRef = React.useRef<any>(null);
-  const soucesRef = React.useRef<any>(null);
-  const mainRef = React.useRef<any>(null);
+const BurgerIngredients: FC = () => {
+  const bunsRef = React.useRef<HTMLLIElement>(null);
+  const soucesRef = React.useRef<HTMLLIElement>(null);
+  const mainRef = React.useRef<HTMLLIElement>(null);
 
   const { ingredients, currentTab } = useSelector(store => store.main);
 
@@ -38,9 +38,11 @@ export default function BurgerIngredients() {
   );
 
   React.useEffect(() => {
-    observer.observe(bunsRef.current);
-    observer.observe(soucesRef.current);
-    observer.observe(mainRef.current);
+    if (bunsRef.current && soucesRef.current && mainRef.current) {
+      observer.observe(bunsRef.current);
+      observer.observe(soucesRef.current);
+      observer.observe(mainRef.current);
+    }
 
     return () => {
       observer.disconnect();
@@ -110,3 +112,5 @@ export default function BurgerIngredients() {
     </>
   )
 }
+
+export default BurgerIngredients

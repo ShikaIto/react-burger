@@ -1,4 +1,4 @@
-import React, { ChangeEvent, SyntheticEvent, FocusEvent } from "react";
+import React, { ChangeEvent, SyntheticEvent, FocusEvent, FC } from "react";
 import { Input, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import commonStyles from '../common.module.css';
 import styles from './Profile.module.css';
@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "../../utils/hooks";
 import { logout } from "../../services/actions/profile";
 import { updateUser } from "../../services/actions/profile";
 
-export default function Profile() {
+const Profile: FC = () => {
     const nameInputRef = React.useRef<HTMLInputElement>(null);
     const emailInputRef = React.useRef<HTMLInputElement>(null);
     const passwordInputRef = React.useRef<HTMLInputElement>(null);
@@ -36,10 +36,12 @@ export default function Profile() {
         dispatch(logout(localStorage.getItem('token')));
     }
 
-    const onIconClick = (inputRef: any) => {
-        setDisabledForm(false);
-        let name = inputRef?.current.name;
-        setInputs({ ...inputs, [name]: active });
+    const onIconClick = (inputRef: React.RefObject<HTMLInputElement>) => {
+        if (inputRef.current) {
+            setDisabledForm(false);
+            let name = inputRef.current.name;
+            setInputs({ ...inputs, [name]: active });
+        }
     }
 
     const onBlur = (e: FocusEvent<HTMLInputElement, Element>) => {
@@ -137,3 +139,5 @@ export default function Profile() {
         </main>
     )
 }
+
+export default Profile

@@ -1,11 +1,11 @@
-import React, { ChangeEvent, SyntheticEvent } from "react";
+import React, { ChangeEvent, SyntheticEvent, FC } from "react";
 import { Input, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from '../common.module.css';
 import { Link } from "react-router-dom";
 import { login } from "../../services/actions/profile";
 import { useDispatch } from "../../utils/hooks";
 
-export default function Register() {
+const Register: FC = () => {
     const dispatch = useDispatch();
 
     const [form, setValue] = React.useState({ name: '', email: '', password: '' });
@@ -63,3 +63,5 @@ export default function Register() {
         </main >
     )
 }
+
+export default Register
