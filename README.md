@@ -19,6 +19,7 @@
 - React-router
 - React-dnd
 - JavaScript
+- TypeScript
 
 Планируется еще рефакторинг на TypeScript и адаптивная верстка на небольшие разрешения
 
